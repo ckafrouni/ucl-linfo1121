@@ -34,13 +34,13 @@ public class MinMaxHeap<Key extends Comparable<Key>> {
 
     @SuppressWarnings("unchecked")
     public MinMaxHeap(int initialSize) {
-        this.content = (Key []) new Comparable[initialSize];
+        this.content = (Key[]) new Comparable[initialSize];
         this.size = 0;
     }
 
     @SuppressWarnings("unchecked")
     private void increaseSize() {
-        Key [] newContent = (Key []) new Comparable[this.content.length*2];
+        Key[] newContent = (Key[]) new Comparable[this.content.length * 2];
         System.arraycopy(this.content, 0, newContent, 0, this.content.length);
         this.content = newContent;
     }
@@ -57,7 +57,9 @@ public class MinMaxHeap<Key extends Comparable<Key>> {
      * Expected time complexity: O(1)
      */
     public Key min() {
-         return null;
+        if (this.size() == 0) return null;
+
+        return this.content[1];
     }
 
     /**
@@ -65,7 +67,15 @@ public class MinMaxHeap<Key extends Comparable<Key>> {
      * Expected time complexity: O(1)
      */
     public Key max() {
-         return null;
+        if (this.size() < 2) return min();
+
+        Key maxKey = this.content[2];
+
+        if (this.size() > 2 && higherThan(this.content[3], maxKey)) {
+            maxKey = this.content[3];
+        }
+
+        return maxKey;
     }
 
     /**
@@ -92,7 +102,7 @@ public class MinMaxHeap<Key extends Comparable<Key>> {
     }
 
     /**
-     * Returns true if the first key is greater than the second key
+     * Returns true if the first key is greater than  the second key
      *
      * @param key The base key for comparison
      * @param comparedTo The key compared to
@@ -119,6 +129,41 @@ public class MinMaxHeap<Key extends Comparable<Key>> {
      * @param position The position of the node to swim in the `content` array
      */
     public void swim(int position) {
+        int depth = getNodeDepth(position);
+
+        if (depth % 2 == 0) {
+            swimMin(position);
+        } else {
+            swimMax(position);
+        }
+    }
+
+    private void swimMin(int position) {
+        int parentIndex = position / 2; // parent is on a max layer
+        int grandParentIndex = position / 4;
+        boolean hasGrandParents = grandParentIndex > 0 && parentIndex != grandParentIndex;
+
+        if (parentIndex >= 1 && higherThan(content[position], content[parentIndex])) {
+            swap(position, parentIndex);
+            swimMax(parentIndex);
+        } else if (hasGrandParents && lessThan(content[position], content[grandParentIndex])) {
+            swap(position, grandParentIndex);
+            swimMin(grandParentIndex);
+        }
+    }
+
+    private void swimMax(int position) {
+        int parentIndex = position / 2; // parent is on a min layer
+        int grandParentIndex = position / 4;
+        boolean hasGrandParents = grandParentIndex > 0 && parentIndex != grandParentIndex;
+
+        if (parentIndex >= 1 && lessThan(content[position], content[parentIndex])) {
+            swap(position, parentIndex);
+            swimMin(parentIndex);
+        } else if (hasGrandParents && higherThan(content[position], content[grandParentIndex])) {
+            swap(position, grandParentIndex);
+            swimMax(grandParentIndex);
+        }
     }
 
     /**

@@ -1,9 +1,11 @@
 # TodoList
 
 ---
+
 ### Priority Queues
-  * [ ] Implementation
-  * [ ] Complexity
+
+* [ ] Implementation
+* [ ] Complexity
 
 A priority queue is a special type of queue data structure where each element is associated with a
 priority. The priority of the elements in a priority queue determines the deletion order. The element with the
@@ -11,16 +13,26 @@ highest priority is deleted first. In case elements have the same priority, they
 ordering in the queue.
 
 ---
+
 ### Rabin-Karp implementation
-  * [ ] Incremental Hash Algorithm (Rolling hash ?)
+
+* [ ] Incremental Hash Algorithm (Rolling hash ?)
 
 ---
-### Binary Heap
-  * [x] insertion
-  * [ ] deletion
+
+### Binary Heap (MinHeap)
+
+* [x] insertion
+* [ ] deletion
+    * [ ] pop
 
 ---
-### ...
-* [ ] ...
+
+### MinMax Heap
+
+* [X] Insertion
+* [ ] Deletion
+    * [ ] popMin
+    * [ ] popMax
 
 ---
