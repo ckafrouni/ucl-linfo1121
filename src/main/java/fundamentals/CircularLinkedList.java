@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
  *
  * A (single) reference to the end of the list (last) is necessary to perform all operations on this queue.
  *
- * You are therefore asked to implement this circular simply linked list by completing the class see (TODO's)
+ * You are therefore asked to implement   this circular simply linked list by completing the class see (TODO's)
  * Most important methods are:
  *
  * - the enqueue to add an element;
@@ -39,16 +39,18 @@ public class CircularLinkedList<Item> implements Iterable<Item> {
 
     public CircularLinkedList() {
         // TODO initialize instance variables
+        last = new Node();
+        last.next = last;
     }
 
     public boolean isEmpty() {
         // TODO
-         return false;
+         return n == 0;
     }
 
     public int size() {
         // TODO
-         return -1;
+         return n;
     }
 
     private long nOp() {
@@ -63,7 +65,14 @@ public class CircularLinkedList<Item> implements Iterable<Item> {
      */
     public void enqueue(Item item) {
         // TODO
+        nOp++;
+        n++;
 
+        Node newLast = new Node();
+        newLast.item = item;
+        newLast.next = last.next;
+        last.next = newLast;
+        last = newLast;
     }
 
     /**
@@ -72,7 +81,21 @@ public class CircularLinkedList<Item> implements Iterable<Item> {
      * Returns the element that was removed from the list.
      */
     public Item remove(int index) {
-         return null;
+        nOp++;
+        if (index < 0 || index >= size()) {
+            throw new IndexOutOfBoundsException();
+        }
+        Node prev = last.next;
+
+        for (int i = 0; i < index; i++) {
+            prev = prev.next;
+        }
+
+        Item item = prev.next.item;
+        prev.next = prev.next.next;
+
+        n--;
+        return item;
     }
 
 
@@ -96,16 +119,27 @@ public class CircularLinkedList<Item> implements Iterable<Item> {
     private class ListIterator implements Iterator<Item> {
 
         // TODO You probably need a constructor here and some instance variables
+        private Node current;
+        private final long nOp;
 
+        public ListIterator() {
+            this.current = last.next.next;
+            this.nOp = nOp();
+        }
 
         @Override
         public boolean hasNext() {
-             return false;
+             return current != last.next;
         }
 
         @Override
         public Item next() {
-             return null;
+             if (nOp != nOp()) throw new ConcurrentModificationException();
+             if (!hasNext()) throw new NoSuchElementException();
+
+             Item val = current.item;
+             current = current.next;
+             return val;
         }
 
     }
