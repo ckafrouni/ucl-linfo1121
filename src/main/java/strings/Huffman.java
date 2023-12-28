@@ -1,10 +1,7 @@
 package strings;
 
 
-import java.util.Arrays;
 import java.util.PriorityQueue;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * This class is used to construct a Huffman trie from frequencies of letters (in unicode or ASCII).
@@ -40,18 +37,20 @@ public class Huffman {
         // TODO
         PriorityQueue<HuffmanNode> pq = new PriorityQueue<>();
 
-        IntStream.range(0, freq.length)
-                .filter(i -> freq[i] > 0)
-                .forEach(i -> pq.offer(new HuffmanNode(i, freq[i], null, null)));
-
+        for (int i = 0; i < freq.length; i++) {
+            pq.offer(new HuffmanNode(i, freq[i], null, null ));
+        }
         while (pq.size() > 1) {
             HuffmanNode left = pq.poll();
             HuffmanNode right = pq.poll();
-            HuffmanNode parent = new HuffmanNode('_', left.getFrequency() + right.getFrequency(), left, right);
+            HuffmanNode parent = new HuffmanNode(-1, left.getFrequency() + right.getFrequency(), left, right);
             pq.offer(parent);
         }
         return pq.poll();
+
     }
+
+
 }
 
 class HuffmanNode implements Comparable<HuffmanNode> {
@@ -72,7 +71,6 @@ class HuffmanNode implements Comparable<HuffmanNode> {
         return this.left;
     }
 
-    @SuppressWarnings("unchecked")
     public void setLeft(HuffmanNode node) {
         this.left = node;
     }
@@ -81,7 +79,6 @@ class HuffmanNode implements Comparable<HuffmanNode> {
         return this.right;
     }
 
-    @SuppressWarnings("unchecked")
     public void setRight(HuffmanNode node) {
         this.right = node;
     }
