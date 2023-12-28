@@ -48,15 +48,21 @@ public class BinaryHeap {
         this.content[this.size] = value;
 
         // fix the tree's invariant
-        int currentIndex = this.size;
-        int parrentIndex = this.size / 2;
+        heapify();
+    }
 
-        while (currentIndex > 1 && this.content[currentIndex] < this.content[parrentIndex]) {
+    // TODO Implement pop(), which removes the smallest value (the first one in the array)
+
+    private void heapify() {
+        int currentIndex = this.size;
+        int parentIndex = currentIndex / 2;
+
+        while (currentIndex > 1 && this.content[currentIndex] < this.content[parentIndex]) {
             int temp = this.content[currentIndex];
-            this.content[currentIndex] = this.content[parrentIndex];
-            this.content[parrentIndex] = temp;
-            currentIndex = parrentIndex;
-            parrentIndex = currentIndex / 2;
+            this.content[currentIndex] = this.content[parentIndex];
+            this.content[parentIndex] = temp;
+            currentIndex = parentIndex;
+            parentIndex = currentIndex / 2;
         }
     }
 

@@ -1,8 +1,7 @@
 # TodoList
 
 ---
-
-* [ ] Priority Queues
+### Priority Queues
   * [ ] Implementation
   * [ ] Complexity
 
@@ -12,9 +11,16 @@ highest priority is deleted first. In case elements have the same priority, they
 ordering in the queue.
 
 ---
+### Rabin-Karp implementation
+  * [ ] Incremental Hash Algorithm (Rolling hash ?)
 
-* [ ] Incremental Hash Algorithm (Rolling hash ?)
-    * [ ] Rabin-Karp implementation
+---
+### Binary Heap
+  * [x] insertion
+  * [ ] deletion
 
+---
+### ...
+* [ ] ...
 
-* [ ] etc...
+---
