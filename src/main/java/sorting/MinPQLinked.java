@@ -105,7 +105,6 @@ public class MinPQLinked<Key> {
     }
 
 
-
     /**
      * Adds a new key to this priority queue.
      *
@@ -138,7 +137,7 @@ public class MinPQLinked<Key> {
         current.size++;
         while (current.left != null && current.right != null) {
             // both left and right are not null
-            if (isPowerOfTwo(current.left.size+1) && current.right.size < current.left.size) {
+            if (isPowerOfTwo(current.left.size + 1) && current.right.size < current.left.size) {
                 // left is complete and there is fewer in right subtree
                 current = current.right; // follow right direction
             } else {
@@ -166,15 +165,88 @@ public class MinPQLinked<Key> {
      */
     public Key delMin() {
         // TODO (unfold the comment on top of the file to read the instructions)
-         return null;
-    }
+        if (this.isEmpty()) throw new NoSuchElementException();
 
+        // Save the root value
+        Key min = root.value;
+        if (this.size() == 1) {
+            root = null;
+            return min;
+        }
+
+        // Swap root and last nodes
+        // Node oldMin = root;
+        Node oldLast = findLast();
+        exch(root, oldLast);
+
+        // Remove the old min node
+        deleteNode(oldLast);
+
+        // Percolate down the root node
+        sink(root);
+
+        return min;
+    }
 
 
     /***************************************************************************
      * Helper functions for compares and swaps.
      ***************************************************************************/
+    private void sink(Node n) {
+        while (n.left != null) {
+            Node minChild = n.left;
+            if (n.right != null && greater(n.left,n.right)) {
+                minChild = n.right;
+            }
+            if (!greater(n,minChild)) break;
+            exch(n,minChild);
+            n = minChild;
+        }
+    }
 
+    private void deleteNode(Node node) {
+        assert (node != null && node.size == 1);
+
+        // A node has :
+        // Node left, Node right, Node parent
+        // We must remove any link to the node
+
+        Node parent = node.parent;
+        if (parent != null) {
+            if (parent.left == node) {
+                parent.left = null;
+            } else {
+                parent.right = null;
+            }
+        } else {
+            root = null;
+        }
+
+        // Decrement the size of each ancestor node up to the root
+        while (parent != null) {
+            parent.size--;
+            parent = parent.parent;
+        }
+
+    }
+
+    private Node findLast() {
+        assert (root != null);
+
+        int size = root.size;
+        Node current = root;
+        int height = (int) (Math.log(size) / Math.log(2)); // Calculate the height of the tree
+
+        for (int i = height; i > 0; i--) {
+            int bit = (size >> (i - 1)) & 1; // Check the bit at ith position from right
+            if (bit == 0) {
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+        return current;
+    }
 
     // check if x = 2^n for some x>0
     private boolean isPowerOfTwo(int x) {
@@ -183,7 +255,7 @@ public class MinPQLinked<Key> {
 
     // Check if node i > j
     private boolean greater(Node i, Node j) {
-        return comparator.compare(i.value,j.value) > 0;
+        return comparator.compare(i.value, j.value) > 0;
     }
 
     // exchange the values in two nodes
