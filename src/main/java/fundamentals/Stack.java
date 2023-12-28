@@ -4,7 +4,7 @@ import java.util.EmptyStackException;
 
 /**
  * Author: Pierre Schaus
- *
+ * <p>
  * You have to implement the interface using
  * - a simple linkedList as internal structure
  * - a growing array as internal structure
@@ -43,6 +43,7 @@ public interface Stack<E> {
  * Implement the Stack interface above using a simple linked list.
  * You should have at least one constructor withtout argument.
  * You are not allowed to use classes from java.util
+ *
  * @param <E>
  */
 class LinkedStack<E> implements Stack<E> {
@@ -61,27 +62,42 @@ class LinkedStack<E> implements Stack<E> {
         }
     }
 
+    public LinkedStack() {
+        this.top = new Node<>(null, null);
+        this.size = 0;
+    }
+
     @Override
     public boolean empty() {
         // TODO Implement empty method
-         return false;
+        return size == 0;
     }
 
     @Override
     public E peek() throws EmptyStackException {
         // TODO Implement peek method
-         return null;
+        if (empty()) throw new EmptyStackException();
+
+        return top.item;
     }
 
     @Override
     public E pop() throws EmptyStackException {
         // TODO Implement pop method
-         return null;
+        if (empty()) throw new EmptyStackException();
+
+        E popped = top.item;
+        top = top.next;
+        size--;
+
+        return popped;
     }
 
     @Override
     public void push(E item) {
         // TODO Implement push method
+        top = new Node<>(item, top);
+        size++;
     }
 }
 
@@ -91,6 +107,7 @@ class LinkedStack<E> implements Stack<E> {
  * The capacity of the array should double when the number of elements exceed its length.
  * You should have at least one constructor withtout argument.
  * You are not allowed to use classes from java.util
+ *
  * @param <E>
  */
 class ArrayStack<E> implements Stack<E> {
@@ -105,24 +122,43 @@ class ArrayStack<E> implements Stack<E> {
     @Override
     public boolean empty() {
         // TODO Implement empty method
-         return false;
+        return size == 0;
     }
 
     @Override
     public E peek() throws EmptyStackException {
         // TODO Implement peek method
-         return null;
+        if (empty()) throw new EmptyStackException();
+
+        return array[size - 1];
     }
 
     @Override
     public E pop() throws EmptyStackException {
         // TODO Implement pop method
-         return null;
+        if (empty()) throw new EmptyStackException();
+
+        E popped = array[--size];
+        if (array.length / 4 > size)
+            resize(array.length / 2);
+
+        return popped;
     }
 
     @Override
     public void push(E item) {
         // TODO Implement push method
+        if (size == array.length)
+            resize(array.length * 2);
+
+        array[size++] = item;
+    }
+
+    private void resize(int newSize) {
+        if (newSize < 0) throw new IllegalArgumentException();
+        E[] newArr = (E[]) new Object[newSize];
+        System.arraycopy(array, 0, newArr, 0, this.size);
+        array = newArr;
     }
 }
 
