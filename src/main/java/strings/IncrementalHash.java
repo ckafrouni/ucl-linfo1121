@@ -9,8 +9,6 @@ package strings;
  * We advise you to debug your code using the first two small unit-tests provided with string of length 2 and 3
  */
 public class IncrementalHash {
-
-
     public static final int R = 31;
     private int M;
     private int RM;
@@ -47,7 +45,6 @@ public class IncrementalHash {
      * @param previousHash = hash(t-1) that is the one on t[from-1,...from+M-2]
      * @param from the index of the substring window, must be on the inteveral [1...t.length-M]
      * @return hash[t] = (t[from] * R^(M-1) + t[from+1] * R^(M-2) + ... + t[from+M-1]) % Q
-     *
      */
     public int nextHash(char[] t, int previousHash, int from) {
         // TODO
@@ -56,6 +53,7 @@ public class IncrementalHash {
         //  The RM values computed above might help you as well in the computation.
         //  Hint2: Modulo operator is distributive (A + B) % Q = (A % Q + B % Q) % Q (property exploited by Horners's method)
         //  Hint3: To compute B % Q if you have x = (A + B) % Q, you should do (x + Q - A % Q) % Q
-         return 0;
+        int previous = previousHash + Q - (t[from - 1] * RM) % Q;
+        return ((previous * R) % Q + t[from + M - 1]) % Q;
     }
 }

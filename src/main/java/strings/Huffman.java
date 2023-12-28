@@ -3,7 +3,7 @@ package strings;
 
 import java.util.PriorityQueue;
 
-/**
+/*
  * This class is used to construct a Huffman trie from frequencies of letters (in unicode or ASCII).
  * As a reminder, in a Huffman trie nodes are weighted (see the `HuffmanNode` class) by
  * the frequencies of the character (if lead node) or the sum of the frequencies of its children
@@ -22,6 +22,7 @@ import java.util.PriorityQueue;
  *                                              |
  *                                     (t, 1)------(m, 2)
  *
+ *
  * In practice you are given an array of frequencies for each of the 256 ASCII code or 65536 unicode characters.
  * The goal is to construct the Huffman trie from this array of frequencies.
  */
@@ -38,7 +39,7 @@ public class Huffman {
         PriorityQueue<HuffmanNode> pq = new PriorityQueue<>();
 
         for (int i = 0; i < freq.length; i++) {
-            pq.offer(new HuffmanNode(i, freq[i], null, null ));
+            pq.offer(new HuffmanNode(i, freq[i], null, null));
         }
         while (pq.size() > 1) {
             HuffmanNode left = pq.poll();
