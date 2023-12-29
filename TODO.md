@@ -18,6 +18,8 @@ ordering in the queue.
 
 * [ ] Incremental Hash Algorithm (Rolling hash ?)
 
+[Rolling hash | Rabin karp algorithm | Pattern searching](https://www.youtube.com/watch?v=BQ9E-2umSWc)
+
 ---
 
 ### Binary Heap (MinHeap)
@@ -36,3 +38,7 @@ ordering in the queue.
     * [ ] popMax
 
 ---
+
+### HashTable
+
+[Hash table linear probing](https://www.youtube.com/watch?v=Ma9XOInZJWM)

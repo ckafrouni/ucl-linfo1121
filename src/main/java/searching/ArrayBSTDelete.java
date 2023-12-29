@@ -1,6 +1,7 @@
 package searching;
 
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 
 /**
@@ -53,6 +54,7 @@ public class ArrayBSTDelete<Key extends Comparable<Key>, Value> {
 
     public ArrayList<Integer> idxLeftNode; // idxLeftNode[i] = index of left node of i
     public ArrayList<Integer> idxRightNode; // idxRightNode[i] = index of right node of i
+    public TreeSet<Integer> freeIndexes;
 
 
     final int NONE = -1;
@@ -62,13 +64,24 @@ public class ArrayBSTDelete<Key extends Comparable<Key>, Value> {
         values = new ArrayList<>();
         idxLeftNode = new ArrayList<>();
         idxRightNode = new ArrayList<>();
+
+        freeIndexes = new TreeSet<>();
     }
 
     private void addNode(Key key, Value val) {
-        keys.add(key);
-        values.add(val);
-        idxLeftNode.add(NONE);
-        idxRightNode.add(NONE);
+        Integer index = freeIndexes.pollFirst();
+
+        if (index == null) {
+            keys.add(key);
+            values.add(val);
+            idxLeftNode.add(NONE);
+            idxRightNode.add(NONE);
+        } else {
+            keys.set(index, key);
+            values.set(index, val);
+            idxLeftNode.set(index, NONE);
+            idxRightNode.set(index, NONE);
+        }
     }
 
     /**
@@ -87,19 +100,25 @@ public class ArrayBSTDelete<Key extends Comparable<Key>, Value> {
                 int cmp = key.compareTo(keys.get(i));
                 if (cmp == 0) {
                     // key already present in this node, just replace its value
-                    values.set(i,val);
+                    values.set(i, val);
                     return false;
                 } else {
                     // key different, follow the left or right link
                     idxChild = cmp < 0 ? idxLeftNode : idxRightNode;
                     int next = idxChild.get(i);
-                    if (next == NONE) idxChild.set(i,keys.size());  // leaf node reached, we create the reference toward the new node
+                    if (next == NONE) {
+                        int newNodeIndex;
+                        if (freeIndexes.isEmpty()) newNodeIndex = keys.size();
+                        else newNodeIndex = freeIndexes.first();
+//                        int newNodeIndex = keys.size();
+                        idxChild.set(i, newNodeIndex);  // leaf node reached, we create the reference toward the new node
+                    }
                     i = next;
                 }
             } while (i != NONE);
         }
         // create the new node
-        addNode(key,val);
+        addNode(key, val);
         return true;
     }
 
@@ -138,29 +157,52 @@ public class ArrayBSTDelete<Key extends Comparable<Key>, Value> {
      * @return true if the key was deleted, false if the key was not present
      */
     public boolean delete(Key key) {
-        // TODO
-         return false;
+        if (keys.isEmpty()) return false; // Tree is empty
+        int deleted = deleteRecursive(0, key);
+        return deleted != NONE;
     }
 
+    private int deleteRecursive(int idx, Key key) {
+        if (idx == NONE) return NONE; // Key not found
 
-    public static void main(String[] args) {
-        ArrayBSTDelete<Integer,Character> bst = new ArrayBSTDelete<>();
+        int cmp = key.compareTo(keys.get(idx));
 
-        // (12,A),(15,B),(5,C),(8,d),(1,E)
-        bst.put(12,'A');
-        bst.put(15,'B');
-        bst.put(5,'C');
-        bst.put(8,'D');
-        bst.put(1,'E');
-
-        for (int i = 0; i < 100; i++) {
-            bst.delete(15);
-            bst.put(15,'B');
+        if (cmp < 0) {
+            int leftIdx = deleteRecursive(idxLeftNode.get(idx), key);
+            if (leftIdx == NONE) return NONE;
+            idxLeftNode.set(idx, leftIdx); // Update left child index
+            return idx;
         }
-        System.out.println(bst.keys.size());
 
+        if (cmp > 0) {
+            int rightIdx = deleteRecursive(idxRightNode.get(idx), key);
+            if (rightIdx == NONE) return NONE;
+            idxRightNode.set(idx, rightIdx); // Update right child index
+            return idx;
+        }
 
+        // Node with only one child or no child
+        if (idxLeftNode.get(idx) == NONE) return idxRightNode.get(idx);
+        else if (idxRightNode.get(idx) == NONE) return idxLeftNode.get(idx);
+
+        // Node with two children: Get the in-order successor
+        int successorIdx = minValueNode(idxRightNode.get(idx));
+        // Copy the in-order successor's content to this node
+        keys.set(idx, keys.get(successorIdx));
+        values.set(idx, values.get(successorIdx));
+        // Delete the in-order successor
+        idxRightNode.set(idx, deleteRecursive(idxRightNode.get(idx), keys.get(successorIdx)));
+
+        freeIndexes.add(successorIdx);
+
+        return idx;
     }
 
-
+    private int minValueNode(int idx) {
+        int currentIdx = idx;
+        while (idxLeftNode.get(currentIdx) != NONE) {
+            currentIdx = idxLeftNode.get(currentIdx);
+        }
+        return currentIdx;
+    }
 }
