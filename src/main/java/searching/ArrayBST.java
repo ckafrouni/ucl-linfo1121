@@ -64,7 +64,49 @@ public class ArrayBST<Key extends Comparable<Key>, Value> {
      * @return true if the key was added, false if already present and the value has simply been erased
      */
     public boolean put(Key key, Value val) {
-         return false;
+        if (keys.isEmpty()) { // Special case: empty tree
+            addNode(key, val);
+            return true;
+        }
+        return putRecursive(0, key, val); // Start from the root
+    }
+
+    private boolean putRecursive(int idx, Key key, Value val) {
+        int cmp = key.compareTo(keys.get(idx));
+        if (cmp == 0) {
+            values.set(idx, val); // Key found, replace value
+            return false;
+        }
+
+        if (cmp < 0) {
+            if (idxLeftNode.get(idx) == NONE) {
+                addNode(idx, true, key, val); // Insert as left child
+                return true;
+            } else {
+                return putRecursive(idxLeftNode.get(idx), key, val); // Go left
+            }
+        }
+
+        if (idxRightNode.get(idx) == NONE) {
+            addNode(idx, false, key, val); // Insert as right child
+            return true;
+        } else {
+            return putRecursive(idxRightNode.get(idx), key, val); // Go right
+        }
+
+    }
+
+    private void addNode(Key key, Value val) {
+        keys.add(key);
+        values.add(val);
+        idxLeftNode.add(NONE);
+        idxRightNode.add(NONE);
+    }
+
+    private void addNode(int parentIdx, boolean isLeft, Key key, Value val) {
+        addNode(key, val);
+        if (isLeft) idxLeftNode.set(parentIdx, keys.size() - 1);
+        else idxRightNode.set(parentIdx, keys.size() - 1);
     }
 
     /**
@@ -74,10 +116,15 @@ public class ArrayBST<Key extends Comparable<Key>, Value> {
      * @return the value attached to this key, null if the key is not present
      */
     public Value get(Key key) {
-         return null;
+        return getRecursive(0, key); // Start from the root
     }
 
+    private Value getRecursive(int idx, Key key) {
+        if (idx == NONE || idx >= keys.size()) return null; // Base case: key not found
 
-
-
+        int cmp = key.compareTo(keys.get(idx));
+        if (cmp == 0) return values.get(idx); // Key found
+        else if (cmp < 0) return getRecursive(idxLeftNode.get(idx), key); // Go left
+        else return getRecursive(idxRightNode.get(idx), key); // Go right
+    }
 }

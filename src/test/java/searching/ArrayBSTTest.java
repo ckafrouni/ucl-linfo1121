@@ -16,6 +16,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Grade
 public class ArrayBSTTest {
+    @Test
+    void simplePut() {
+        ArrayBST<Integer, Character> bst = new ArrayBST<>();
+
+        assertTrue(bst.put(12, 'A'));
+        assertTrue(bst.put(15, 'B'));
+        assertTrue(bst.put(5, 'C'));
+        assertTrue(bst.put(8, 'D'));
+        assertTrue(bst.put(1, 'E'));
+    }
 
     @Test
     @Grade(value = 1, cpuTimeout = 2000)
