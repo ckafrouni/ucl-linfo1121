@@ -28,7 +28,8 @@ public class BinarySearchTreeHigher<Key extends Comparable<Key>, Value> {
     /**
      * Initializes an empty symbol table.
      */
-    public BinarySearchTreeHigher() {}
+    public BinarySearchTreeHigher() {
+    }
 
     /**
      * Returns true if this symbol table is empty.
@@ -66,9 +67,9 @@ public class BinarySearchTreeHigher<Key extends Comparable<Key>, Value> {
     private Value get(Node x, Key key) {
         if (x == null) return null;
         int cmp = key.compareTo(x.key);
-        if      (cmp < 0) return get(x.left, key);
+        if (cmp < 0) return get(x.left, key);
         else if (cmp > 0) return get(x.right, key);
-        else              return x.val;
+        else return x.val;
     }
 
     /**
@@ -84,9 +85,9 @@ public class BinarySearchTreeHigher<Key extends Comparable<Key>, Value> {
     private Node put(Node x, Key key, Value val) {
         if (x == null) return new Node(key, val, 1);
         int cmp = key.compareTo(x.key);
-        if      (cmp < 0) x.left  = put(x.left,  key, val);
+        if (cmp < 0) x.left = put(x.left, key, val);
         else if (cmp > 0) x.right = put(x.right, key, val);
-        else              x.val   = val;
+        else x.val = val;
         x.size = 1 + size(x.left) + size(x.right);
         return x;
     }
@@ -99,9 +100,14 @@ public class BinarySearchTreeHigher<Key extends Comparable<Key>, Value> {
      * @return the minimum key, null if the tree is empty
      */
     public Key minKey() {
-         return null;
+        if (isEmpty()) return null;
+        return minKey(root);
     }
 
+    private Key minKey(Node node) {
+        if (node.left == null) return node.key;
+        return minKey(node.left);
+    }
 
 
     /**
@@ -112,11 +118,16 @@ public class BinarySearchTreeHigher<Key extends Comparable<Key>, Value> {
      * @return the least key greater than key, or null if there is no such key
      */
     public Key higherKey(Key key) {
-         return null;
+        return higherKey(root, key, null);
     }
 
-    private Key higherKey(Node x, Key key) {
-         return null;
+    private Key higherKey(Node node, Key key, Key higher) {
+        if (node == null) return higher;
+
+        if (node.key.compareTo(key) > 0) return higherKey(node.left, key, node.key);
+
+        return higherKey(node.right, key, higher);
+
     }
 
 }

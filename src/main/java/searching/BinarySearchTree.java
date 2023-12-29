@@ -42,11 +42,7 @@ public class BinarySearchTree {
         if (node == null) return currentCeil;
 
         if (node.getKey() == value) return node.getKey();
-
-        else if (node.getKey() > value) {
-            return ceilInner(node.getLeft(), value, node.getKey());
-        }
-
+        else if (node.getKey() > value) return ceilInner(node.getLeft(), value, node.getKey());
         return ceilInner(node.getRight(), value, currentCeil);
     }
 
