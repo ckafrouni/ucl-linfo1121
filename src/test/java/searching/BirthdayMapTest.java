@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.Random;
 import java.util.List;
 
@@ -17,7 +19,7 @@ import java.util.List;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class BirthdayMapTest {
 
-    
+
     @Test
     @Grade(value = 1)
     @Order(0)
@@ -32,6 +34,8 @@ public class BirthdayMapTest {
         birthdayMap.addPerson(bob);
         birthdayMap.addPerson(charlie);
 
+        System.out.println(birthdayMap);
+
         List<Person> peopleBornIn2000 = birthdayMap.getPeopleBornInYear("2000");
 
         assertTrue(peopleBornIn2000.contains(alice));
@@ -39,7 +43,5 @@ public class BirthdayMapTest {
         assertFalse(peopleBornIn2000.contains(charlie));
     }
 
-
-    
 
 }
