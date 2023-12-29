@@ -25,31 +25,43 @@ public class ClosestPair {
      * @param x the target value for the sum
      */
     public static int[] closestPair(int[] a, int x) {
-        System.out.println(Arrays.toString(a));
         Arrays.sort(a);
 
         int nOp = 0;
 
-        int[] closestPair = new int[]{a[0], a[0]};
-        int closestDiff = Math.abs(a[0] + a[0] - x);
+        int i = 0;
+        int j = a.length - 1;
 
-        for (int j : a) {
-            for (int k : a) {
-                nOp++;
+        int[] closestPair = {a[i], a[j]};
+        int closestDiff = Math.abs(a[i] + a[j] - x);
 
-                int diff = Math.abs(j + k - x);
-                if (diff < closestDiff) {
-                    closestPair = new int[]{j, k};
-                    closestDiff = diff;
-                }
-                if (closestDiff == 0) break;
+        while (i <= j) {
+            nOp++;
+
+            int sum = a[i] + a[j];
+            int diff = Math.abs(sum - x);
+
+            if (diff < closestDiff) {
+                closestDiff = diff;
+
+                closestPair[0] = a[i];
+                closestPair[1] = a[j];
             }
-            if (closestDiff == 0) break;
+
+            if (diff == 0) break;
+
+            if (sum > x) {
+                j--;
+            } else if (sum < x) {
+                i++;
+            }
         }
 
-        System.out.println("size = " + a.length);
-        System.out.println("nOp = " + nOp);
-        System.out.println("-");
+//        System.out.println("a = " + Arrays.toString(a));
+//        System.out.println("size = " + a.length);
+//        System.out.println("nOp = " + nOp);
+//        System.out.println("pair = " + Arrays.toString(closestPair));
+//        System.out.println("-");
         return closestPair;
     }
 }
