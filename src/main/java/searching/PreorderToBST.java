@@ -1,25 +1,26 @@
 package searching;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PreorderToBST {
-    /* 
-    * We ask you to implement the reconstruction of a BST starting
-    * from a sequence of keys corresponding to preorder traversal of the BST.
-    *
-    * Your algorithm should execute in linear time (number of keys).
-    * BST Node's only contains integer key but no associated value.
-    *
-    * For example, for the input [10,5,7,14,12] the reconstructed BST should be like this :
-    *
-    *                             10
-    *                              |
-    *                  5 ------------------------ 14
-    *                  |                          |
-    *                  ------ 7           12 ------
-    *                                 
-    *                                     
-    */
+    /*
+     * We ask you to implement the reconstruction of a BST starting
+     * from a sequence of keys corresponding to preorder traversal of the BST.
+     *
+     * Your algorithm should execute in linear time (number of keys).
+     * BST Node's only contains integer key but no associated value.
+     *
+     * For example, for the input [10,5,7,14,12] the reconstructed BST should be like this :
+     *
+     *                             10
+     *                              |
+     *                  5 ------------------------ 14
+     *                  |                          |
+     *                  ------ 7           12 ------
+     *
+     *
+     */
 
     protected Node root;
 
@@ -46,17 +47,38 @@ public class PreorderToBST {
     /**
      * Reconstruct the BST based on a valid preorder serialization in O(n)
      * For instance for [10,5,7,14,12] you should have root equal to
-     * new Node(new Node(null,new Node(null,null,7,1),5,2),new Node(new Node(null,null,12,1),null,14,2),10,5)
+     * Node(
+     *  Node(
+     *      null,
+     *      Node(null,null,7,1),
+     *      5,2),
+     *  Node(
+     *      Node(null,null,12,1),
+     *      null,
+     *      14,2),
+     *  10,5)
      * @param preOrderInput is a valid output obtained using preorderWrite
      */
-    public PreorderToBST(int [] preOrderInput) {
+    public PreorderToBST(int[] preOrderInput) {
         // no need to change it, but you can if you want
-        root = preorderRead(preOrderInput,0,Integer.MIN_VALUE,Integer.MAX_VALUE);
+        root = preorderRead(preOrderInput, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
-    public Node preorderRead(int [] preOrderInput, int i, int min, int max) {
-        // !!!!!!! TODO !!!!!!!!
-         return new Node(null,null,preOrderInput[0]);
+    public Node preorderRead(int[] preOrderInput, int i, int min, int max) {
+        // TODO
+        // [10,5,7,14,12]
+        if (i >= preOrderInput.length) return null;
+        if (preOrderInput[i] > max) return null;
+        if (preOrderInput[i] < min) return null;
+
+        Node left;
+        Node right;
+
+        left = preorderRead(preOrderInput, i + 1, min, preOrderInput[i]);
+        int leftSize = left == null ? 0 : left.size;
+        right = preorderRead(preOrderInput, i + 1 + leftSize, preOrderInput[i], max);
+
+        return new Node(left, right, preOrderInput[i]);
     }
 
     public int[] preorderWrite() {
@@ -91,19 +113,19 @@ public class PreorderToBST {
         public Node right;
         public int key;
         public int size;
-    
+
         public Node(Node left, Node right, int key) {
             this.left = left;
             this.right = right;
             this.key = key;
             this.size = (left == null ? 0 : left.size) + (right == null ? 0 : right.size) + 1;
         }
-    
+
         @Override
         public String toString() {
-            return "new Node("+left+","+right+","+key+")";
+            return "new Node(" + left + "," + right + "," + key + ")";
         }
-    
+
         @Override
         public boolean equals(Object obj) {
             if (obj != null) {
@@ -118,18 +140,18 @@ public class PreorderToBST {
                 return false;
             }
         }
-    
-        public int [] preOrder() {
+
+        public int[] preOrder() {
             ArrayList<Integer> acc = new ArrayList<>();
             preOrder(acc);
             return Arrays.stream(acc.toArray(new Integer[]{})).mapToInt(i -> i).toArray();
         }
-    
+
         private void preOrder(ArrayList<Integer> acc) {
             acc.add(key);
             if (left != null) left.preOrder(acc);
             if (right != null) right.preOrder(acc);
         }
-    
+
     }
 }
