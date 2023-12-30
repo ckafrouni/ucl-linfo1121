@@ -14,6 +14,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(ConditionalOrderingExtension.class)
@@ -28,7 +29,7 @@ public class SkylineTest {
     public void debug1() {
         int[][] buildings = {{1, 11, 5}, {2, 6, 7}, {3, 13, 9}, {12, 7, 16}, {14, 3, 25}, {19, 18, 22}, {23, 13, 29}, {24, 4, 28}};
 
-        int [][] res = {{1,11},{3,13},{9,0},{12,7},{16,3},{19,18},{22,3},{23,13},{29,0}};
+        int[][] res = {{1, 11}, {3, 13}, {9, 0}, {12, 7}, {16, 3}, {19, 18}, {22, 3}, {23, 13}, {29, 0}};
         List<int[]> expected = Arrays.asList(res);
 
         List<int[]> computed = Skyline.getSkyline(buildings);
@@ -46,9 +47,9 @@ public class SkylineTest {
     @GradeFeedback(message = "Sorry, something is wrong with your get algorithm, debug first this small example")
     @Order(0)
     public void debug2() {
-        int[][] buildings = {{0,4,7},{0,8,6},{6,6,12},{6,4,16},{10,5,20},{22,2,26}};
+        int[][] buildings = {{0, 4, 7}, {0, 8, 6}, {6, 6, 12}, {6, 4, 16}, {10, 5, 20}, {22, 2, 26}};
 
-        int [][] res = {{0,8},{6,6},{12,5},{20,0},{22,2},{26,0}};
+        int[][] res = {{0, 8}, {6, 6}, {12, 5}, {20, 0}, {22, 2}, {26, 0}};
         List<int[]> expected = Arrays.asList(res);
 
         List<int[]> computed = Skyline.getSkyline(buildings);
@@ -59,9 +60,6 @@ public class SkylineTest {
         }
         assertEquals(expected.size(), computed.size());
     }
-
-
-
 
 
 }
