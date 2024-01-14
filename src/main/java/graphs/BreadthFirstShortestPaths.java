@@ -1,6 +1,7 @@
 package graphs;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -52,6 +53,22 @@ public class BreadthFirstShortestPaths {
     // Breadth-first search from multiple sources
     private void bfs(Graph G, Iterable<Integer> sources) {
         // TODO
+        LinkedList<Integer> q = new LinkedList<>();
+        for (Integer s : sources) {
+            marked[s] = true;
+            distTo[s] = 0;
+            q.add(s);
+        }
+
+        while (!q.isEmpty()) {
+            int v = q.poll();
+            for (Integer neighbor : G.adj(v)) {
+                if (marked[neighbor]) continue;
+                marked[neighbor] = true;
+                distTo[neighbor] = distTo[v] + 1;
+                q.add(neighbor);
+            }
+        }
     }
 
     /**
@@ -62,7 +79,7 @@ public class BreadthFirstShortestPaths {
      */
     public boolean hasPathTo(int v) {
         // TODO
-         return false;
+        return marked[v];
     }
 
     /**
@@ -74,18 +91,16 @@ public class BreadthFirstShortestPaths {
      */
     public int distTo(int v) {
         // TODO
-         return -1;
+        return distTo[v];
     }
 
     static class Graph {
 
         private List<Integer>[] edges;
 
-        public Graph(int nbNodes)
-        {
+        public Graph(int nbNodes) {
             this.edges = (ArrayList<Integer>[]) new ArrayList[nbNodes];
-            for (int i = 0;i < edges.length;i++)
-            {
+            for (int i = 0; i < edges.length; i++) {
                 edges[i] = new ArrayList<>();
             }
         }
@@ -106,7 +121,7 @@ public class BreadthFirstShortestPaths {
                 count += bag.size();
             }
 
-            return count/2;
+            return count / 2;
         }
 
         /**
