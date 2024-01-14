@@ -1,7 +1,9 @@
 package graphs;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Consider this class, DepthFirstPaths, which computes the paths to any connected node
@@ -50,6 +52,13 @@ public class DepthFirstPaths {
     // Depth first search from v
     private void dfs(Graph G, int v) {
         // TODO
+        marked[v] = true;
+        for (Integer neighbor : G.adj(v)) {
+            if (!marked[neighbor]) {
+                edgeTo[neighbor] = v;
+                dfs(G, neighbor);
+            }
+        }
     }
 
     /**
@@ -60,7 +69,7 @@ public class DepthFirstPaths {
      */
     public boolean hasPathTo(int v) {
         // TODO
-         return false;
+        return marked[v];
     }
 
     /**
@@ -73,18 +82,26 @@ public class DepthFirstPaths {
      */
     public Iterable<Integer> pathTo(int v) {
         // TODO
-         return null;
+        if (!hasPathTo(v)) return null;
+
+        Stack<Integer> path = new Stack<>();
+
+        int current = v;
+        while (current != this.s) {
+            path.add(current);
+            current = edgeTo[current];
+        }
+
+        return path;
     }
 
     static class Graph {
 
         private List<Integer>[] edges;
 
-        public Graph(int nbNodes)
-        {
+        public Graph(int nbNodes) {
             this.edges = (ArrayList<Integer>[]) new ArrayList[nbNodes];
-            for (int i = 0;i < edges.length;i++)
-            {
+            for (int i = 0; i < edges.length; i++) {
                 edges[i] = new ArrayList<>();
             }
         }
@@ -105,7 +122,7 @@ public class DepthFirstPaths {
                 count += bag.size();
             }
 
-            return count/2;
+            return count / 2;
         }
 
         /**
